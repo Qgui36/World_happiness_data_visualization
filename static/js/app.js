@@ -1,130 +1,145 @@
+// @TODO: YOUR CODE HERE!
+var svgWidth = 1200;
+var svgHeight = 600;
+var url = "http://127.0.0.1:5000/data";
 
-// read csv data, sort data by Happiness_Rank, then assign top 10 and bottom 10 counties to two variables.
-var dataset;
-d3.csv("2017.csv")
-  .then(function(data) {
-    dataset = data;
-    dataset.sort(function(a, b){return a.Happiness_Rank - b.Happiness_Rank});
-    var happinessTop10 = dataset.slice(0,10);
-    console.log(happinessTop10);
-    var happinessBottom10 = dataset.slice(-11, -1)
-    console.log(happinessBottom10);
+var margin = {
+  top: 20,
+  right: 40,
+  bottom: 60,
+  left: 100
+};
+
+var width = svgWidth - margin.left - margin.right;
+var height = svgHeight - margin.top - margin.bottom;
+
+// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+var svg = d3.select("#scatter")
+  .append("svg")
+  .attr("width", svgWidth)
+  .attr("height", svgHeight);
+
+var chartGroup = svg.append("g")
+  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+// Import Data
+// // d3.csv("./assets/data/2017.csv")
+d3.json(url, function(bcData) {
+  // .then(function(bcData) {
+
+    // Step 1: Parse Data/Cast as numbers
+    // ==============================
+    bcData.forEach(function(data) {
+        data.happy = +data.Happiness_Score;
+        data.economy = +data.Economy_GDP_per_Capita;
+        data.family = +data.Family;
+        data.health = +data.Health_Life_Expectancy;
+        data.freedom = +data.Freedom;
+        data.generosity = +data.Generosity
+        data.trust = +data.Trust_Government_Corruption;
+        // console.log(data);
+    });
+    // Step 2: Create scale functions
+    // ==============================
+    var xLinearScale = d3.scaleLinear()
+      .domain([d3.min(bcData, d => d.economy)-.1, d3.max(bcData, d => d.economy)])
+      .range([0, width]);
+
+    var yLinearScale = d3.scaleLinear()
+      .domain([d3.min(bcData, d => d.happy)-.2, d3.max(bcData, d => d.happy)])
+      .range([height, 0]);
+
+    // Step 3: Create axis functions
+    // ==============================
+    var bottomAxis = d3.axisBottom(xLinearScale);
+    var leftAxis = d3.axisLeft(yLinearScale);
+
+    // Step 4: Append Axes to the chart
+    // ==============================
+    chartGroup.append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(bottomAxis)
+      .attr("class", "axisText");
+
+    chartGroup.append("g")
+      .call(leftAxis)
+      .attr("class", "axisText");
+
+    // Step 5a: Create blue Circles
+    // ==============================
+    var circlesGroup1 = chartGroup.selectAll("circle")
+    .data(bcData)
+    .enter()
+    .append("circle")
+    .attr("cx", d => xLinearScale(d.economy))
+    .attr("cy", d => yLinearScale(d.happy))
+    .attr("r", "18")
+    .attr("class", "stateCircle")
+    .attr("opacity", ".6");
     
-    // using Chart.js to make stacked chart for top 10 countries
-    var ctxTop=document.getElementById("bar-chart-top")
-    ctxTop.style.backgroundColor = 'white';
-    new Chart(ctxTop, {
-      type: 'bar',
-      data: {
-        labels: happinessTop10.map(c => c.Country),
-        datasets: [
-          {
-            label: "Economy (GDP/person)",
-            backgroundColor: "lightgreen",
-            data: happinessTop10.map(c => c.Economy_GDP_per_Capita)
-          },
-          {
-            label: "Dystopia Residual",
-            backgroundColor: "lightblue",
-            data: happinessTop10.map(c => c.Dystopia_Residual)
-          },
-          {
-            label: "Family",
-            backgroundColor: "lightpink",
-            data: happinessTop10.map(c => c.Family)
-          },
-          {
-            label: "Freedom",
-            backgroundColor: "lightgrey",
-            data: happinessTop10.map(c => c.Freedom)
-          },
-          {
-            label: "Generosity",
-            backgroundColor: "#D7BDE2",
-            data: happinessTop10.map(c => c.Generosity)
-          },
-          {
-            label: "Health Life Expectancy",
-            backgroundColor: "lightyellow",
-            data: happinessTop10.map(c => c.Health_Life_Expectancy)
-          },
-          {
-            label: "Trust Government Corruption",
-            backgroundColor: "#FAD7A0",
-            data: happinessTop10.map(c => c.Trust_Government_Corruption)
-          }
-        ]
-      },
-      options: {
-        legend: { display: false },
-        title: {
-          display: true,
-          text: 'Ten Happiest Country Scores 2017'
-        },
-        scales: {
-          xAxes: [{ stacked: true }],
-          yAxes: [{ stacked: true }]
-        }
-      }
-    });
-    // making stacked chart for bottom 10 countries
-    var ctxBottom=document.getElementById("bar-chart-bottom")
-    ctxBottom.style.backgroundColor = 'white';
-    new Chart(ctxBottom, {
-      type: 'bar',
-      data: {
-        labels: happinessBottom10.map(c => c.Country),
-        datasets: [
-          {
-            label: "Economy (GDP/person)",
-            backgroundColor: "lightgreen",
-            data: happinessBottom10.map(c => c.Economy_GDP_per_Capita)
-          },
-          {
-            label: "Dystopia Residual",
-            backgroundColor: "lightblue",
-            data: happinessBottom10.map(c => c.Dystopia_Residual)
-          },
-          {
-            label: "Family",
-            backgroundColor: "lightpink",
-            data: happinessBottom10.map(c => c.Family)
-          },
-          {
-            label: "Freedom",
-            backgroundColor: "lightgrey",
-            data: happinessBottom10.map(c => c.Freedom)
-          },
-          {
-            label: "Generosity",
-            backgroundColor: "#D7BDE2",
-            data: happinessBottom10.map(c => c.Generosity)
-          },
-          {
-            label: "Health Life Expectancy",
-            backgroundColor: "lightyellow",
-            data: happinessBottom10.map(c => c.Health_Life_Expectancy)
-          },
-          {
-            label: "Trust Government Corruption",
-            backgroundColor: "#FAD7A0",
-            data: happinessBottom10.map(c => c.Trust_Government_Corruption)
-          }
-        ]
-      },
-      options: {
-        legend: { display: false },
-        title: {
-          display: true,
-          text: 'Ten Least Happy Country Scores 2017'
-        },
-        scales: {
-          xAxes: [{ stacked: true }],
-          yAxes: [{ stacked: true }]
-        },
-      }
-    });
+    // Step 5b: Create Circle text
+    // ==============================
+    var circlesGroup = chartGroup.selectAll(null)
+    .data(bcData)
+    .enter()
+    .append("text")
+    .attr("dx", d => xLinearScale(d.economy))
+    .attr("dy", d => yLinearScale(d.happy))
+    .attr("class", "inactive")
+    .attr("opacity", ".9")
+    .text(d => d.Abbr_three);
 
-      
+     // Step 6: Initialize tool tip
+    // ==============================
+    var toolTip = d3.tip()
+      .attr("class", "d3-tip")
+      .offset([100, 130])
+      .html(function(d) {
+        return (`<h2>${d.Country}</h2>Happiness Rank: ${d.happy}%<br>Economy (GDP/Capita): ${d.economy}%`);
+      });
 
- })
+     // Step 7: Create tooltip in the chart
+    // ==============================
+    chartGroup.call(toolTip);
+
+    // Step 8: Create event listeners to display and hide the tooltip
+    // ==============================
+    circlesGroup.on("click", function(data) {
+        toolTip.show(data, this);
+        
+      })
+    
+      // onmouseout event
+        .on("mouseout", function(data, index) {
+          toolTip.hide(data);
+        });
+    
+        // circlesGroup1.on("mouseover", function() {
+        //       d3.select(this)
+        //      .attr("r", 25)
+        //      .attr("fill", "lightgreen");
+        //   })
+
+        // // onmouseout event
+        // .on("mouseout", function() {
+        //   d3.select(this)
+        //   .attr("r", "18")
+        //   .attr("class", "stateCircle")
+        //   .attr("opacity", ".6");
+        // });
+
+    // Create axes labels
+    chartGroup.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left + 40)
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("class", "aText")
+      .text("Happiness Rank");
+
+    chartGroup.append("text")
+      .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
+      .attr("class", "aText")
+      .text("Economy (GDP per Capita)");
+
+});
