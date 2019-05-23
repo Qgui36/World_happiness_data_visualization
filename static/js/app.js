@@ -24,9 +24,9 @@ var chartGroup = svg.append("g")
 
 // Import Data
 // // d3.csv("./assets/data/2017.csv")
-d3.json(url, function(bcData) {
+d3.json(url).then(function(bcData) {
   // .then(function(bcData) {
-
+    console.log(bcData);
     // Step 1: Parse Data/Cast as numbers
     // ==============================
     bcData.forEach(function(data) {
