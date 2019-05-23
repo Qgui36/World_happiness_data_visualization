@@ -1,7 +1,7 @@
 
 // read csv data, sort data by Happiness_Rank, then assign top 10 and bottom 10 counties to two variables.
 var dataset;
-d3.csv("static/data/2017.csv")
+d3.csv("2017.csv")
   .then(function(data) {
     dataset = data;
     dataset.sort(function(a, b){return a.Happiness_Rank - b.Happiness_Rank});
