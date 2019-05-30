@@ -1,3 +1,9 @@
+#map {
+  width: 1200px;
+  height: 800px;
+}
+
+
 * {
   box-sizing: border-box;
   font-family: Ubuntu, sans-serif;
@@ -318,3 +324,4 @@ body {
 #footer p {
   margin: 0;
   font-size: 16px;
+}
