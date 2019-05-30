@@ -19,14 +19,20 @@ var svg = d3.select("#scatter")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
 
+  // code from Qin:
+svg.append("rect")
+ .attr("width", "100%")
+ .attr("height", "100%")
+ .attr("fill", "white");
+
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Import Data
 // // d3.csv("./assets/data/2017.csv")
-d3.json(url, function(bcData) {
+d3.json(url).then(function(bcData) {
   // .then(function(bcData) {
-
+    console.log(bcData);
     // Step 1: Parse Data/Cast as numbers
     // ==============================
     bcData.forEach(function(data) {
@@ -46,7 +52,7 @@ d3.json(url, function(bcData) {
       .range([0, width]);
 
     var yLinearScale = d3.scaleLinear()
-      .domain([d3.min(bcData, d => d.happy)-.2, d3.max(bcData, d => d.happy)])
+      .domain([d3.min(bcData, d => d.happy)-.3, d3.max(bcData, d => d.happy)])
       .range([height, 0]);
 
     // Step 3: Create axis functions
@@ -93,9 +99,9 @@ d3.json(url, function(bcData) {
     // ==============================
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
-      .offset([100, 130])
+      .offset([40, 150])
       .html(function(d) {
-        return (`<h2>${d.Country}</h2>Happiness Rank: ${d.happy}%<br>Economy (GDP/Capita): ${d.economy}%`);
+        return (`<h3>${d.Country}</h3>Happiness Rank: ${d.happy.toFixed(2)}%<br>Economy (GDP/Capita): ${d.economy.toFixed(2)}%`);
       });
 
      // Step 7: Create tooltip in the chart
@@ -114,20 +120,6 @@ d3.json(url, function(bcData) {
           toolTip.hide(data);
         });
     
-        // circlesGroup1.on("mouseover", function() {
-        //       d3.select(this)
-        //      .attr("r", 25)
-        //      .attr("fill", "lightgreen");
-        //   })
-
-        // // onmouseout event
-        // .on("mouseout", function() {
-        //   d3.select(this)
-        //   .attr("r", "18")
-        //   .attr("class", "stateCircle")
-        //   .attr("opacity", ".6");
-        // });
-
     // Create axes labels
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
