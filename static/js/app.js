@@ -132,6 +132,6 @@ d3.json(url).then(function(bcData) {
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
       .attr("class", "aText")
-      .text("Economy (GDP per Capita)");
+      .text("Economy (GDP per Capita) Score");
 
 });
