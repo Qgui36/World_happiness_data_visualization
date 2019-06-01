@@ -101,7 +101,7 @@ d3.json(url).then(function(bcData) {
       .attr("class", "d3-tip")
       .offset([40, 150])
       .html(function(d) {
-        return (`<h3>${d.Country}</h3>Happiness Score: ${d.happy.toFixed(2)}%<br>Economy (GDP/Capita): ${d.economy.toFixed(2)}%`);
+        return (`<h3>${d.Country}</h3>Happiness Rank: ${d.happy.toFixed(2)}%<br>Economy (GDP/Capita): ${d.economy.toFixed(2)}%`);
       });
 
      // Step 7: Create tooltip in the chart
@@ -127,7 +127,7 @@ d3.json(url).then(function(bcData) {
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "aText")
-      .text("Happiness Rank");
+      .text("Happiness Score");
 
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
