@@ -127,11 +127,11 @@ d3.json(url).then(function(bcData) {
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "aText")
-      .text("Happiness Rank");
+      .text("Happiness Score");
 
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
       .attr("class", "aText")
-      .text("Economy (GDP per Capita)");
+      .text("Economy (GDP per Capita) Score");
 
 });
