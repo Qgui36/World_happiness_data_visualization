@@ -11,8 +11,8 @@ var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.pn
 });
 
 var myMap = L.map("map", {
-  center: [20, 10],
-  zoom: 3,
+  center: [20, 30],
+  zoom: 2,
   layers: streetmap
 });
 
@@ -21,12 +21,11 @@ d3.json(url).then(function(data) {
   var heatArray = []
 
   for (var i = 0; i < data.length; i++) {
-
     heatArray.push([data[i].Lat, data[i].Lng, data[i].Happiness_Score]);
   }
 
   var heat = L.heatLayer(heatArray, {
-    radius: 40,
+    radius: 900,
     blur: 45
   }).addTo(myMap);
 })
