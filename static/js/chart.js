@@ -23,7 +23,7 @@ d3.json(url).then(function(data) {
   for (var i = 0; i < data.length; i++) {
     heatArray.push([data[i].Lat, data[i].Lng, data[i].Happiness_Score]);
   }
-
+  console.log(heatArray);
   var heat = L.heatLayer(heatArray, {
     radius: 100,
     blur: 45

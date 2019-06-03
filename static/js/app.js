@@ -1,6 +1,6 @@
 // @TODO: YOUR CODE HERE!
-var svgWidth = 1200;
-var svgHeight = 600;
+var svgWidth = 750;
+var svgHeight = 400;
 var url = "http://127.0.0.1:5000/data";
 
 var margin = {

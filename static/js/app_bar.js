@@ -10,13 +10,12 @@ d3.json(url).then(function(bcData) {
   var happinessBottom10 = dataset.slice(-11, -1)
   console.log(happinessBottom10);
  
-  var selector = d3.select("#average_score");
-  selector.text(``);
-  Object.entries(happinessTop10[6]).forEach(([key, value]) => {
-    if (key=="Country"||key=="Economy_GDP_per_Capita"||key=="Dystopia_Residual"||key=="Family"
-    ||key=="Freedom"||key=="Generosity"||key=="Health_Life_Expectancy"||key=="Trust_Government_Corruption") {
-    selector.append('h6').text(`${key}: ${value}`);}
-  });
+  // selector.text(``);
+  // Object.entries(happinessTop10[6]).forEach(([key, value]) => {
+  //   if (key=="Country"||key=="Economy_GDP_per_Capita"||key=="Dystopia_Residual"||key=="Family"
+  //   ||key=="Freedom"||key=="Generosity"||key=="Health_Life_Expectancy"||key=="Trust_Government_Corruption") {
+  //   selector.append('h6').text(`${key}: ${value}`);}
+  // });
 
   // using Chart.js to make stacked chart for top 10 countries
   var ctxTop=document.getElementById("bar-chart-top")
